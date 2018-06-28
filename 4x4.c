@@ -6,7 +6,7 @@
 /*   By: gfranco <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/28 18:50:53 by gfranco           #+#    #+#             */
-/*   Updated: 2018/06/28 19:11:08 by gfranco          ###   ########.fr       */
+/*   Updated: 2018/06/28 19:56:53 by gfranco          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,9 @@ int			ft_newline(char *str)
 	return (0);
 }
 
+/*Create function to return false if a tetriminos is flase even if the others
+ * are correct.*/
+
 int			ft_count(char *str)
 {
 	int		count;
@@ -44,54 +47,58 @@ int			ft_count(char *str)
 	nb = 0;
 	while (str[add] != '\0')
 	{
-		while (count++ < 20 && str[add] != '\0')
-			add++;
-		if (str[count] == '\0')
+		while (count < 19 && str[add] != '\0')
 		{
+			add++;
+			count++;
+		}
+		if (str[add + 1] == '\0')
+		{
+//			if (count != 19)
+//				return (0);
 			nb++;
-			printf("%d A\n", count);
 			return (nb);
 		}
-		else if (str[count] == '\n')
+		else if (str[add + 1] == '\n')
 		{
-			printf("%d B\n", count);
+			if (count != 19)
+				return (0);
 			nb++;
-			add = add + count;
-			count = 0;
-			printf("%d C\n", count);
-//			printf("%d\n", nb);
+			printf("%d\n", count);
+			count = -1;
+			add++;
 		}
-		printf("%d D\n", count);
 	}
 	return (nb);
 }
 
 int			ft_v4x4(char *str)
 {
-	if (ft_newline(str) == 0 && ft_count(str) == 0)
+	if (ft_newline(str) == 0 && ft_count(str) != 0)
 		return (0);
 	return (1);
 }
 
 int	main()
 {
-	char a[] = ".##.\n..##\n....\n....\n\n....\n....\n....\n....\n";
+	char a[] = ".##.\n..##\n....\n....\n\n....\n....\n....\n....\n\n....\n....\n....\n....\n";
 	char b[] = "...#\n....\n....\n....\n\n....\n";
-	char c[] = "...#\n....\n....\n";
+	char c[] = "...#\n....\n....\n....\n";
 
 	printf("***************\n");
 
-	printf("A must be 2: %d\n", ft_count(a)); //displays 2 - correct
+	printf("A must be 3: %d\n", ft_count(a)); //displays 3 - correct
 	printf("***************\n");
 
-	printf("B must be 1: %d\n", ft_count(b));//displays 1 - correct
+	printf("B must be 0: %d\n", ft_count(b));//displays 0 - correct
 	printf("***************\n");
 	
-	printf("C must be -1: %d\n", ft_count(c));//displays -1 - correct
+	printf("C must be 1: %d\n", ft_count(c));//displays 1 - correct
+	
 	printf("***************\n");
 
 	printf("***************\n");
-	printf("zero means that ft_newline and ft_is19 of string A is satisfied. Outcome:%d\n", ft_v4x4(a)); //displays 0 - correct
-	printf("zero means that ft_newline and ft_1s19 of string B is satisfied. Outcome:%d\n", ft_v4x4(b)); //displays 1 - correct
+	printf("%d\n", ft_v4x4(a)); //displays 0 - correct
+	printf("%d\n", ft_v4x4(b)); //displays 1 - correct
 	return (0);
 }
